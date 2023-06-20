@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Go for a Punch Research Timeline</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Go for a Punch Research Timeline</h1>
+  <div class="timeline">
+    <div class="year-nav">
+      <select id="yearSelector" onchange="filterTimeline(this.value)">
+        <option value="all">All</option>
+      </select>
+      <button onclick="toggleSorting()">Toggle Sorting Order</button>
+    </div>
+    <div class="items-container"></div>
+    <div class="placeholder-item">
+      <p>Sorry, we don't have enough data on this year!</p>
+      <p>If you believe this to be a mistake, please contact u/pikachubolk or email pikachubolk@schoolsquid.xyz.</p>
+    </div>
+  </div>
+
+  <script>
+    const timeline = [
+      { year: '2023', month: '06', day: '30', title: 'Event 3', description: 'Description of event 3', image: 'https://via.placeholder.com/500x300' },
+      { year: '2022', month: '12', day: '15', title: 'Event 2', description: 'Description of event 2', image: 'https://via.placeholder.com/500x300' },
+      { year: '2022', month: '03', day: '10', title: 'Event 4', description: 'Description of event 4', image: 'https://via.placeholder.com/500x300' },
+      { year: '2021', month: '09', day: '01', title: 'Event 1', description: 'Description of event 1', image: 'https://via.placeholder.com/500x300' }
+    ];
+
+    let sortByNewest = true;
+
+    const yearSelector = document.getElementById('yearSelector');
+    const itemsContainer = document.querySelector('.items-container');
+    const placeholderItem = document.querySelector('.placeholder-item');
+    const placeholderText = placeholderItem.querySelector('p:first-child');
+    const placeholderContact = placeholderItem.querySelector('p:last-child');
+
+    const formattedDates = [];
+
+    const minYear = 2000;
+    const maxYear = 2023;
+
+    for (let year = minYear; year <= maxYear; year++) {
+      const option = document.createElement('option');
+      option.value = year.toString();
+      option.textContent = year.toString();
+      yearSelector.appendChild(option);
+    }
+
+    timeline.forEach(item => {
+      const { year, month, day, title, description, image } = item;
+
+      const itemDiv = document.createElement('div');
+      itemDiv.classList.add('item');
+      itemDiv.dataset.year = year;
+      itemDiv.dataset.month = month;
+      itemDiv.dataset.day = day;
+
+      const img = document.createElement('img');
+      img.src = image || 'https://via.placeholder.com/500x300';
+      img.alt = 'Placeholder Image';
+      itemDiv.appendChild(img);
+
+      const contentDiv = document.createElement('div');
+      contentDiv.classList.add('content');
+
+      const titleH2 = document.createElement('h2');
+      titleH2.textContent = title;
+      contentDiv.appendChild(titleH2);
+
+      const descriptionP = document.createElement('p');
+      descriptionP.textContent = description;
+      contentDiv.appendChild(descriptionP);
+
+      const dateP = document.createElement('p');
+      dateP.classList.add('date');
+      dateP.textContent = `${day}/${month}/${year}`;
+      contentDiv.appendChild(dateP);
+
+      const button = document.createElement('button');
+      button.textContent = 'View Details';
+      contentDiv.appendChild(button);
+
+      itemDiv.appendChild(contentDiv);
+
+      itemsContainer.appendChild(itemDiv);
+
+      formattedDates.push(`${month}/${day}/${year}`);
+    });
+
+    const dateElements = document.querySelectorAll('.item .date');
+    dateElements.forEach((dateElement, index) => {
+      dateElement.textContent = formattedDates[index];
+    });
+
+    filterTimeline('all');
+
+    function filterTimeline(year) {
+      const items = document.querySelectorAll('.item');
+      yearSelector.value = year;
+
+      items.forEach(item => {
+        const itemYear = item.dataset.year;
+        if (year === 'all' || itemYear === year) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      if (year === 'all') {
+        placeholderItem.style.display = 'none';
+      } else if (document.querySelectorAll('.item[data-year="' + year + '"]').length === 0) {
+        placeholderItem.style.display = 'block';
+        placeholderText.textContent = `Sorry, we don't have enough data on this year!`;
+        placeholderContact.style.display = 'block';
+      } else {
+        placeholderItem.style.display = 'none';
+        placeholderContact.style.display = 'none';
+      }
+    }
+
+    function toggleSorting() {
+      sortByNewest = !sortByNewest;
+      const items = document.querySelectorAll('.item');
+      const sortedItems = Array.from(items).sort((a, b) => {
+        const dateA = new Date(a.dataset.year, a.dataset.month, a.dataset.day);
+        const dateB = new Date(b.dataset.year, b.dataset.month, b.dataset.day);
+        return sortByNewest ? dateB - dateA : dateA - dateB;
+      });
+
+      itemsContainer.innerHTML = '';
+      sortedItems.forEach(item => {
+        itemsContainer.appendChild(item);
+      });
+    }
+  </script>
+</body>
+</html>
