@@ -22,10 +22,10 @@
 
   <script>
     const timeline = [
-      { year: '2023', month: '06', day: '30', title: 'Event 3', description: 'Description of event 3', image: 'https://via.placeholder.com/500x300' },
-      { year: '2022', month: '03', day: '06', title: 'Pezle Released Saki video', description: 'Youtube content creator Pezle created a video about Go For A Punch', image: 'https://img.youtube.com/vi/f2DqsAN4VJ4/0.jpg' },
-      { year: '2022', month: '03', day: '10', title: 'Event 4', description: 'Description of event 4', image: 'https://via.placeholder.com/500x300' },
-      { year: '2021', month: '09', day: '01', title: 'Event 1', description: 'Description of event 1', image: 'https://via.placeholder.com/500x300' }
+      { year: '2023', month: '06', day: '30', title: 'Event 3', description: 'Description of event 3', image: 'https://via.placeholder.com/500x300', url: '' },
+      { year: '2022', month: '03', day: '06', title: 'Pezle Released Saki video', description: 'Youtube content creator Pezle created a video about Go For A Punch', image: 'https://img.youtube.com/vi/f2DqsAN4VJ4/0.jpg', url: 'https://www.youtube.com/watch?v=f2DqsAN4VJ4' },
+      { year: '2022', month: '03', day: '10', title: 'Event 4', description: 'Description of event 4', image: 'https://via.placeholder.com/500x300', url: '' },
+      { year: '2021', month: '09', day: '01', title: 'Event 1', description: 'Description of event 1', image: 'https://via.placeholder.com/500x300', url: '' }
     ];
 
     let sortByNewest = true;
@@ -49,7 +49,7 @@
     }
 
     timeline.forEach(item => {
-      const { year, month, day, title, description, image } = item;
+      const { year, month, day, title, description, image, url } = item;
 
       const itemDiv = document.createElement('div');
       itemDiv.classList.add('item');
@@ -80,6 +80,13 @@
 
       const button = document.createElement('button');
       button.textContent = 'View Details';
+      button.disabled = !url; // Disable the button if no URL is specified
+      button.dataset.url = url; // Set the URL as a data attribute
+      button.addEventListener('click', () => {
+        if (url) {
+          window.location.href = url;
+        }
+      });
       contentDiv.appendChild(button);
 
       itemDiv.appendChild(contentDiv);
