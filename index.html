@@ -3,6 +3,42 @@
 <head>
   <title>Go for a Punch Research Timeline</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .item img {
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .item img:hover {
+      transform: scale(1.1);
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      z-index: 9999;
+      overflow: auto;
+    }
+    .lightbox-image {
+      max-width: 90%;
+      max-height: 90%;
+      margin: auto;
+      display: block;
+      margin-top: 5%;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      color: #fff;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <h1>Go for a Punch Research Timeline</h1>
@@ -20,11 +56,16 @@
     </div>
   </div>
 
+  <div class="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img class="lightbox-image" src="" alt="Zoomed Image">
+  </div>
+
   <script>
     const timeline = [
-      { year: '2023', month: '06', day: '30', title: 'Event 3', description: 'Description of event 3', image: 'https://via.placeholder.com/500x300', url: '' },
+      { year: '2019', month: '12', day: '22', title: 'The fake OP?', description: 'On this day, the researchers from the SakiSanobashi subreddit had an encounter with a user who claimed to be the original poster (OP) from the 4chan thread. However, nobody could confirm right away whether he was the real deal or not.', image: 'https://via.placeholder.com/500x300', url: 'https://www.reddit.com/r/SakiSanobashi/comments/ee5bgd/i_am_the_op_of_saki_sanobashi_its_fake_and_im/' },
       { year: '2022', month: '03', day: '06', title: 'Pezle Released Saki video', description: 'Youtube content creator Pezle created a video about Go For A Punch', image: 'https://img.youtube.com/vi/f2DqsAN4VJ4/0.jpg', url: 'https://www.youtube.com/watch?v=f2DqsAN4VJ4' },
-      { year: '2022', month: '03', day: '10', title: 'Event 4', description: 'Description of event 4', image: 'https://via.placeholder.com/500x300', url: '' },
+      { year: '2020', month: '01', day: '24', title: 'The fake OP, Debunked?', description: 'On this day researcher u/SteliosRotas debunked the post made by u/SakiSanobashiOP', image: 'https://via.placeholder.com/500x300', url: 'https://www.reddit.com/r/SakiSanobashi/comments/hf75j6/we_have_finally_debunked_usakisanobashiop/' },
       { year: '2015', month: '02', day: '21', title: 'The OP first posted about "Go For A Punch"', description: 'This is the first day the community heard about "Go For A Punch" and also the start of a long search!', image: 'https://pbs.twimg.com/media/E8My0_wXoAQa2xA?format=jpg&name=large', url: 'https://goforapunch.com/OP' }
     ];
 
@@ -35,6 +76,8 @@
     const placeholderItem = document.querySelector('.placeholder-item');
     const placeholderText = placeholderItem.querySelector('p:first-child');
     const placeholderContact = placeholderItem.querySelector('p:last-child');
+    const lightbox = document.querySelector('.lightbox');
+    const lightboxImage = document.querySelector('.lightbox-image');
 
     const formattedDates = [];
 
@@ -60,6 +103,9 @@
       const img = document.createElement('img');
       img.src = image || 'https://via.placeholder.com/500x300';
       img.alt = 'Placeholder Image';
+      img.addEventListener('click', () => {
+        openLightbox(img.src);
+      });
       itemDiv.appendChild(img);
 
       const contentDiv = document.createElement('div');
@@ -141,6 +187,15 @@
       sortedItems.forEach(item => {
         itemsContainer.appendChild(item);
       });
+    }
+
+    function openLightbox(imageSrc) {
+      lightboxImage.src = imageSrc;
+      lightbox.style.display = 'block';
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = 'none';
     }
   </script>
 </body>
