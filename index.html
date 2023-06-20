@@ -148,6 +148,7 @@
     });
 
     filterTimeline('all');
+    sortPosts();
 
     function filterTimeline(year) {
       const items = document.querySelectorAll('.item');
@@ -174,19 +175,23 @@
       }
     }
 
-    function toggleSorting() {
-      sortByNewest = !sortByNewest;
+    function sortPosts() {
       const items = document.querySelectorAll('.item');
       const sortedItems = Array.from(items).sort((a, b) => {
         const dateA = new Date(a.dataset.year, a.dataset.month, a.dataset.day);
         const dateB = new Date(b.dataset.year, b.dataset.month, b.dataset.day);
-        return sortByNewest ? dateB - dateA : dateA - dateB;
+        return sortByNewest ? dateA - dateB : dateB - dateA;
       });
 
       itemsContainer.innerHTML = '';
       sortedItems.forEach(item => {
         itemsContainer.appendChild(item);
       });
+    }
+
+    function toggleSorting() {
+      sortByNewest = !sortByNewest;
+      sortPosts();
     }
 
     function openLightbox(imageSrc) {
